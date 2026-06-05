@@ -102,7 +102,7 @@ with col_graph:
         fig.add_annotation(x=9.5, y=9.5, text="🔥 Ⅰ. 緊急かつ重要", showarrow=False, font=dict(color="gray"))
         fig.add_annotation(x=1.5, y=9.5, text="📈 Ⅱ. 重要だが未緊急", showarrow=False, font=dict(color="gray"))
         fig.add_annotation(x=9.5, y=1.5, text="⚡ Ⅲ. 緊急だが非重要", showarrow=False, font=dict(color="gray"))
-        fig.add_annotation(x=1.5, y=1.5, text="☕ Ⅳ. 優先度：低", showarrow=False, font=dict(color="gray"))
+        fig.add_annotation(x=1.5, y=1.5, text="🍵 Ⅳ. 優先度：低", showarrow=False, font=dict(color="gray"))
         
         st.plotly_chart(fig, use_container_width=True)
     else:
