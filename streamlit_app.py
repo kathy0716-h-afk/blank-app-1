@@ -81,7 +81,7 @@ with col_graph:
         fig.update_traces(
             marker=dict(size=14, color='#FF4B4B', line=dict(width=2, color='DarkSlateGrey')),
             textposition="top center",
-            font=dict(size=12)
+            textfont=dict(size=12)
         )
         
         # 4象限（マトリクス）に分けるための補助線を中央（5.5）に引く
