@@ -20,7 +20,7 @@ if "tasks" not in st.session_state:
         ]
     )
 
-# 🚀 【追加】完了済みタスクを保存する箱
+# 完了済みタスクを保存する箱
 if "completed_tasks" not in st.session_state:
     st.session_state.completed_tasks = pd.DataFrame(columns=["task", "importance", "urgency"])
 
@@ -57,22 +57,30 @@ with col_input:
             c1.write(f"**{row['task']}** \n*(重要度: {row['importance']} / 緊急度: {row['urgency']})*")
             
             if c2.button("完了", key=f"del_{idx}", type="primary"):
-                # 🚀 【変更】消す前に、完了済みリストへコピーする
                 completed_row = st.session_state.tasks.iloc[[idx]]
                 st.session_state.completed_tasks = pd.concat(
                     [st.session_state.completed_tasks, completed_row], ignore_index=True
                 )
-                
-                # 元のリストから削除
                 st.session_state.tasks = st.session_state.tasks.drop(idx).reset_index(drop=True)
                 st.toast(f"「{row['task']}」を完了しました！ 🎉")
                 st.rerun()
 
-# --- 右カラム: マトリクス図の可視化 ---
+# --- 🔄 修正：右カラム（グラフ表示）を調整 ---
 with col_graph:
     st.subheader("📊 タスク位置のマトリクス")
     
     if not st.session_state.tasks.empty:
+        # 🚀 【追加】グラフの上に凡例（象限ラベル）を表示
+        st.markdown("""
+        **【マトリクスの見方】**
+        | 象限 | 特徴 | 対応の目安 |
+        |---|---|---|
+        | **🔥 I. 緊急かつ重要** (右上) | すぐにやるべき最優先タスク | **すぐ実行** |
+        | **📈 II. 重要だが未緊急** (左上) | 将来のために計画的に進める | **計画** |
+        | **⚡ III. 緊急だが非重要** (右下) | 他人に任せる、または効率化する | **他人に任せる** |
+        | **☕ IV. 優先度：低** (左下) | 後回しにする、またはやめる | **後回し・削除** |
+        """)
+        
         fig = px.scatter(
             st.session_state.tasks,
             x="urgency",
@@ -85,8 +93,9 @@ with col_graph:
         
         fig.update_traces(
             marker=dict(size=14, color='#FF4B4B', line=dict(width=2, color='DarkSlateGrey')),
-            textposition="top center",
-            textfont=dict(size=12)  # ⭕ 前回のバグを修正！
+            # 🚀 【変更】textpositionを"top center"から"middle right"に変更し、点との重なりを解消
+            textposition="middle right", 
+            textfont=dict(size=12)
         )
         
         fig.add_hline(y=5.5, line_dash="dash", line_color="rgba(128, 128, 128, 0.5)")
@@ -96,30 +105,6 @@ with col_graph:
             xaxis=dict(tickmode='linear', tick0=1, dtick=1),
             yaxis=dict(tickmode='linear', tick0=1, dtick=1),
             height=600,
+            # グラフの余白を少し調整
             margin=dict(l=20, r=20, t=20, b=20)
         )
-        
-        fig.add_annotation(x=9.5, y=9.5, text="🔥 Ⅰ. 緊急かつ重要", showarrow=False, font=dict(color="gray"))
-        fig.add_annotation(x=1.5, y=9.5, text="📈 Ⅱ. 重要だが未緊急", showarrow=False, font=dict(color="gray"))
-        fig.add_annotation(x=9.5, y=1.5, text="⚡ Ⅲ. 緊急だが非重要", showarrow=False, font=dict(color="gray"))
-        fig.add_annotation(x=1.5, y=1.5, text="☕ Ⅳ. 優先度：低", showarrow=False, font=dict(color="gray"))
-        
-        st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.info("表示するタスクがありません。")
-
-# --- 🚀 【追加】画面下部: 完了したタスクの履歴表示 ---
-st.write("---")
-st.subheader("🎉 完了済みのタスク履歴")
-
-if st.session_state.completed_tasks.empty:
-    st.caption("完了したタスクはまだありません。1つずつ片付けていきましょう！")
-else:
-    # 打ち消し線付きで完了タスクを並べる
-    for idx, row in st.session_state.completed_tasks.iterrows():
-        st.write(f"✅ ~~{row['task']}~~ *(重要度: {row['importance']} / 緊急度: {row['urgency']})*")
-    
-    # 履歴が増えすぎたときのために、リセットボタンも設置
-    if st.button("履歴をすべてクリア", type="secondary"):
-        st.session_state.completed_tasks = pd.DataFrame(columns=["task", "importance", "urgency"])
-        st.rerun()
