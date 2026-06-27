@@ -6,7 +6,7 @@ from supabase import create_client, Client
 # ページの設定
 st.set_page_config(page_title="タスク優先順位マトリクス", layout="wide", page_icon="🎯")
 
-st.title("🎯 タスク優先順位マトリクス (重要度 × 緊急度) - Supabase版")
+st.title("🎯 タスク優先順位マトリクス (重要度 × 緊急度) ")
 st.write("データはSupabaseにリアルタイムに保存されます。")
 
 # --- 🚀 Supabaseの初期化 ---
