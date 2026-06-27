@@ -73,11 +73,12 @@ streamlit run app.py
 
 ---
 
-## 💻 使用技術
+## 💻 使用技術（WebAPIの活用）
+このアプリは、以下の外部サービス、WebAPI、およびライブラリを連携させて動作しています。
 * **Frontend / UI**: Streamlit
-* **Visualization**: Plotly Express
-* **Data Handling**: Pandas
-* **Database (Backend)**: Supabase (PostgreSQL)
+* **Visualization**: Plotly Express (インタラクティブなグラフ描画API)
+* **Data Handling**: Pandas (データの表形式への変換・加工)
+* **Database (Backend)**: Supabase (データの永続保存のためのクラウド接続API / PostgreSQL)
 
 ---
 
